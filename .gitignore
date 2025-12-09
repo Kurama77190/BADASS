@@ -1,0 +1,26 @@
+# Fichiers temporaires GNS3
+gns3_*.vars
+gns3_*.db
+gns3_*.conf
+gns3_*.log
+gns3_*.pid
+gns3_jwt_secret_key
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environnements virtuels
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
