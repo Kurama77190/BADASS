@@ -91,4 +91,27 @@ Tu utilises **GNS3** avec **Docker** pour :
 
 > _**INFO :**_ *frrouting* est une suite logicielle de routage open-source pour Linux/Unix. Les protocoles de routage inclus dans cette image sont *BGP, OSPF, IS-IS, RIP, PIM, LDP* et en composants principaux *Zebra, BGPD, OSPFD, ISISD*. Parfait pour creer notre **_routeur gns3_**
 
+- ##### Verifier la configuration de l'image docker sur GNS3
+1. Importer maintenant l'image docker dans l'applications
+2. Ouvrir un terminal auxiliaire
+3. Regarder si la configuration des composants sont bien activer dans le fichier ``/etc/frr/daemons``
+4. Lancer ``vtysh`` (Virtual TeletYpe SHell)
+5. Lancer ``sh int`` (show interface) et verifier si nous avons bien eth0 -> eth07 de up avec l'interface lo.
+6. Lancer ``conf t`` (configure terminal)
+
+
+> _**INFO :**_ 
+> **_vtysh_** *(Virtual TeletYpe SHell)* est le shell interactif unifié de FRRouting.
+> **_sh int_** *(abréviation de show interface)* affiche l'état des interfaces réseau sur le routeur FRRouting.
+>_**conf t**_ (abréviation de configure terminal) entre en mode de configuration dans vtysh.
+
+- ##### Installer notre machine hosts alpine
+    > On pull l'image d'alpine depuis le docker hub et on le rajoute a gns3
+    > On le place dans le graphique avec le rooteur gns3
+    > On le demarre et on cacorde la machine hosts alphine dans gns3 en eth0 au rooteur gns3 de frr !
+
+### Resultat en photo
+
+![alt text](/images/image.png)
+
 [...]
