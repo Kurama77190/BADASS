@@ -114,4 +114,9 @@ Tu utilises **GNS3** avec **Docker** pour :
 
 ![alt text](/images/image.png)
 
-[...]
+### Build Dockerfile
+
+```bash
+docker build -t gns3:latest -f _sben-tay-1_router .
+docker build -t alpine:latest -f _sben-tay-1_host .
+```

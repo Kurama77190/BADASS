@@ -1,0 +1,3 @@
+FROM alpine:latest
+
+RUN apk add busybox iproute2 iputils bash
