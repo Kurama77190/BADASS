@@ -114,9 +114,10 @@ Tu utilises **GNS3** avec **Docker** pour :
 
 ![alt text](/images/image.png)
 
-### Build Dockerfile
+### Build Dockerfile and start Graphical Network Simulation 3
 
 ```bash
-docker build -t gns3:latest -f _sben-tay-1_router .
-docker build -t alpine:latest -f _sben-tay-1_host .
+docker build -t gns3:latest -f _sben-tay-1_router . 2> /dev/null &>1 && \
+docker build -t alpine:latest -f _sben-tay-1_host . 2> /dev/null &>1 && \
+gns3 &
 ```

@@ -1,0 +1,55 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from _sben-tay-1_host
+#1 transferring dockerfile: 104B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:latest
+#2 DONE 1.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/alpine:latest@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375
+#4 resolve docker.io/library/alpine:latest@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375 0.0s done
+#4 sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 0B / 3.86MB 0.2s
+#4 sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 3.86MB / 3.86MB 0.3s done
+#4 extracting sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 0.1s done
+#4 DONE 0.4s
+
+#5 [2/2] RUN apk add busybox iproute2 iputils bash
+#5 0.474 ( 1/18) Installing ncurses-terminfo-base (6.5_p20251123-r0)
+#5 0.479 ( 2/18) Installing libncursesw (6.5_p20251123-r0)
+#5 0.496 ( 3/18) Installing readline (8.3.1-r0)
+#5 0.501 ( 4/18) Installing bash (5.3.3-r1)
+#5 0.522   Executing bash-5.3.3-r1.post-install
+#5 0.526 ( 5/18) Installing libcap2 (2.77-r0)
+#5 0.530 ( 6/18) Installing zstd-libs (1.5.7-r2)
+#5 0.542 ( 7/18) Installing libelf (0.194-r0)
+#5 0.547 ( 8/18) Installing libmnl (1.0.5-r2)
+#5 0.553 ( 9/18) Installing iproute2-minimal (6.17.0-r0)
+#5 0.571 (10/18) Installing libxtables (1.8.11-r1)
+#5 0.579 (11/18) Installing iproute2-tc (6.17.0-r0)
+#5 0.595 (12/18) Installing iproute2-ss (6.17.0-r0)
+#5 0.600 (13/18) Installing iproute2 (6.17.0-r0)
+#5 0.609   Executing iproute2-6.17.0-r0.post-install
+#5 0.611 (14/18) Installing iputils-arping (20250605-r0)
+#5 0.617 (15/18) Installing iputils-clockdiff (20250605-r0)
+#5 0.620 (16/18) Installing iputils-ping (20250605-r0)
+#5 0.626 (17/18) Installing iputils-tracepath (20250605-r0)
+#5 0.630 (18/18) Installing iputils (20250605-r0)
+#5 0.630 Executing busybox-1.37.0-r29.trigger
+#5 0.638 OK: 12 MiB in 34 packages
+#5 DONE 0.7s
+
+#6 exporting to image
+#6 exporting layers
+#6 exporting layers 0.3s done
+#6 exporting manifest sha256:81a1c300386fdf0a680ccedf2c48de240741fdf490c113cffb9edf6ee529f596 done
+#6 exporting config sha256:451ce0eba0006b9af28096b0ebd79bf3e2af4c111b3a070acea9a5e868550507 done
+#6 exporting attestation manifest sha256:d4e44722ae0e87700e6bacd403632433fe715efeb003965efefef1201787754c 0.0s done
+#6 exporting manifest list sha256:797bda7758d445e9c6f53b49b6ac20f21ba9e26513a870e204c69cf6ad416c57 0.0s done
+#6 naming to docker.io/library/alpine:latest done
+#6 unpacking to docker.io/library/alpine:latest 0.1s done
+#6 DONE 0.4s
