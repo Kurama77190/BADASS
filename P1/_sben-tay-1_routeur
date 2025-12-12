@@ -1,0 +1,5 @@
+FROM frrouting/frr:latest
+
+RUN sed -i /etc/frr/daemons -e 's/bgpd=no/bgpd=yes/' && \
+    sed -i /etc/frr/daemons -e 's/ospfd=no/ospfd=yes/' && \
+    sed -i /etc/frr/daemons -e 's/isisd=no/isisd=yes/'
