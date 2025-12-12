@@ -1,0 +1,4 @@
+FROM alpine:latest
+
+# Install necessary packages
+RUN apk update && apk add busybox iproute2 iputils bash nano
