@@ -65,6 +65,10 @@ Tu utilises **GNS3** avec **Docker** pour :
 
 ### Docker Images install
 
+docker build -t gns3:latest -f _sben-tay-1_router . 2> /dev/null &>1 && \
+docker build -t alpine:latest -f _sben-tay-1_host . 2> /dev/null &>1 && \
+gns3 &
+
 - ##### Installer frrouting/frr:latest et setup routeur gns3
     > ``docker pull frrouting/frr`` - Pull en local
     > ``docker run -d frrouting/frr`` - Lancer le docker en local
@@ -72,6 +76,12 @@ Tu utilises **GNS3** avec **Docker** pour :
     > ``vi /etc/frr/daemons`` - Activer les composant que nous avons besoins
     > ``docker stop $(name_frrouting)`` - Stoper le docker
     > ``docker commit $(name_frrouting) gns3`` - Creer notre image pimper pour gns3 avec tous les composant de l'image setup.
+
+- #### Installer frrouting/frr:latest et alpine:latest via DockerFile
+    > docker build -t gns3:latest -f _sben-tay-1_router .
+    > docker build -t alpine:latest -f _sben-tay-1_host .
+    
+>_**INFO :**_ _Cette methode et la plus simple, car les images seront deja prete a l'emploi._
 
 *exemple de daemons configurer* :
 
