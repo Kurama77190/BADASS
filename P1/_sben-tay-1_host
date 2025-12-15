@@ -1,3 +1,4 @@
 FROM alpine:latest
 
+# Install necessary packages for debugging and networking
 RUN apk add busybox iproute2 iputils bash nano

@@ -1,5 +1,9 @@
 FROM frrouting/frr:latest
 
+# Install necessary packages for debugging and networking
+RUN apk add busybox iproute2 iputils bash nano
+
+# Enable necessary FRR daemons
 RUN sed -i /etc/frr/daemons -e 's/bgpd=no/bgpd=yes/' && \
     sed -i /etc/frr/daemons -e 's/ospfd=no/ospfd=yes/' && \
     sed -i /etc/frr/daemons -e 's/isisd=no/isisd=yes/'
