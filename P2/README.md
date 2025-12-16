@@ -204,3 +204,82 @@ ip addr add 30.1.1.4/24 dev br0
 
 bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.1
 ```
+
+
+
+## CLI TESTING
+
+Utilisez ces commandes pour vérifier l'état des interfaces, adresses et du tunnel VXLAN.
+
+```bash
+# Affiche toutes les interfaces et leur état
+ip link show
+
+# Affiche toutes les adresses IP configurées
+ip addr show
+
+# Détails étendus pour l'interface VXLAN (encapsulation, options)
+ip -d link show vxlan10
+
+# Affiche les ports et membres du bridge
+bridge link
+bridge fdb show
+
+# Routes IP
+ip route show
+
+# Vérifier la connectivité L3 entre hôtes (exécuter depuis host1)
+ping -c 3 30.1.1.2
+
+# Sur le routeur/point de transport : observer les paquets VXLAN UDP
+tcpdump -n -i eth0 udp port 4789
+```
+
+## CLI DEBUGGING
+
+Commandes utiles pour diagnostiquer les problèmes réseau et kernel.
+
+```bash
+# Voir les derniers messages du noyau liés au réseau
+dmesg | tail -n 50
+
+# Vérifier si le forwarding IP est activé
+sysctl net.ipv4.ip_forward
+
+# Rechercher paramètres réseau globaux
+sysctl -a | grep net.ipv4
+
+# Vérifier l'état matériel/driver d'une interface
+ethtool eth0
+
+# Voir les voisins ARP/NDP
+ip neigh show
+
+# Vérifier les logs du démon réseau ou systemd si nécessaire
+journalctl -u NetworkManager -n 100 --no-pager
+```
+
+## CLI CLEAR
+
+Commandes pour nettoyer la configuration VXLAN/bridge (exécuter en root).
+
+```bash
+# Supprime l'interface VXLAN si présente
+ip link del vxlan10 2>/dev/null || true
+
+# Désactive et supprime le bridge
+ip link set br0 down 2>/dev/null || true
+ip link del br0 2>/dev/null || true
+
+# Supprime les adresses IP des interfaces physiques
+ip addr flush dev eth0
+ip addr flush dev eth1
+
+# Vider la table FDB du bridge (si nécessaire)
+bridge fdb flush dev vxlan10 2>/dev/null || true
+
+# Arrêter tcpdump (exemple) si lancé en arrière-plan
+pkill -f 'tcpdump -n -i eth0 udp port 4789' || true
+```
+
+Note: la plupart de ces commandes doivent être exécutées avec les privilèges root (sudo).
