@@ -1,23 +1,26 @@
-# Create a new Linux bridge named br0 and bring it up to ensure it's operational.
+# Router 1 (VTEP 1)
+
+# Reset
+ip link del vxlan10 2>/dev/null
+ip link del br0 2>/dev/null
+
+# Bridge L2 (overlay)
 ip link add br0 type bridge
-ip link set dev br0 up
+ip link set br0 up
 
-# Assign an IP address to eth0 to facilitate local network connectivity. This interface acts as a gateway or a local network interface on the router.
-ip addr add 10.1.1.13/24 dev eth0
+# Underlay IP (transport VXLAN)
+ip addr flush dev eth0
+ip addr add 10.1.1.1/24 dev eth0
+ip link set eth0 up
 
-# Create a VXLAN interface named vxlan10 with a VXLAN Network Identifier (VNI) of 10.
-# Configure it to use eth0 for encapsulated traffic, specifying the remote VXLAN endpoint's IP and the local IP to use.
-# The dstport 4789 specifies the standard VXLAN port for traffic.
-ip link add name vxlan10 type vxlan id 10 dev eth0 remote 10.1.1.23 local 10.1.1.13 dstport 4789
+# VXLAN
+ip link add vxlan10 type vxlan id 10 dev eth0 local 10.1.1.1 remote 10.1.1.2 dstport 4789
+ip link set vxlan10 up
 
-# Assign an IP address to the vxlan10 interface. This IP is used for inter-VXLAN communication, allowing devices across VXLANs to communicate as if they were on the same physical network.
-ip addr add 20.1.1.1/24 dev vxlan10
+# Ports dans le bridge
+ip link set eth1 up
+ip link set eth1 master br0
+ip link set vxlan10 master br0
 
-# Ensure the vxlan10 interface is up to start handling traffic.
-ip link set dev vxlan10 up
-
-# Add eth1 to the bridge, allowing devices connected to this interface to communicate with devices on the VXLAN.
-ip link set dev eth1 master br0
-
-# Similarly, add the vxlan10 interface to the bridge, integrating VXLAN traffic into the bridged network. This enables seamless layer 2 connectivity across the underlying layer 3 network.
-ip link set dev vxlan10 master br0
+# (debug)
+ip addr add 30.1.1.3/24 dev br0
