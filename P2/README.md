@@ -58,4 +58,149 @@ Le **MULTICAST** est une forme de diffusion d'un émetteur (source unique) vers 
 
 ![alt text](../images/Topologie%20VXLAN.png)
 
-### Premiere Etape
+## Interface VXLAN Unicast: 
+
+
+#### router 1 (VTEP 1)
+```bash
+# Nettoyage : supprime d'éventuelles interfaces VXLAN et bridge préexistantes
+ip link del vxlan10 2>/dev/null
+ip link del br0 2>/dev/null
+
+# Création du bridge local qui va relier les interfaces locales (L2)
+ip link add br0 type bridge
+# Activation du bridge
+ip link set br0 up
+
+# Retire les adresses IP existantes sur eth0 pour une configuration propre
+ip addr flush dev eth0
+# Attribue l'adresse IP publique/transport pour le VTEP local
+ip addr add 10.1.1.1/24 dev eth0
+# Active l'interface physique utilisée pour le transport
+ip link set eth0 up
+
+# Création de l'interface VXLAN (VTEP) en mode unicast vers le pair
+# id 10 : identifiant du VXLAN, local : IP locale du VTEP, remote : IP distante du pair
+ip link add vxlan10 type vxlan id 10 dev eth0 local 10.1.1.1 remote 10.1.1.2 dstport 4789
+# Activation de l'interface VXLAN
+ip link set vxlan10 up
+
+# Active l'interface interne vers le LAN raccordé au routeur
+ip link set eth1 up
+# Connecte l'interface LAN au bridge pour que le trafic L2 traverse le VXLAN
+ip link set eth1 master br0
+# Connecte l'interface VXLAN au bridge pour intégrer le tunnel au domaine L2
+ip link set vxlan10 master br0
+
+# Assigne une adresse IP au bridge pour la gestion/communication dans le sous-réseau virtuel
+ip addr add 30.1.1.3/24 dev br0
+
+# Table FDB : force le forwarding des trames vers l'IP du peer (unicast)
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.2
+```
+
+### router 2 (VTEP 2)
+```bash
+ip link del vxlan10 2>/dev/null
+ip link del br0 2>/dev/null
+
+ip link add br0 type bridge
+ip link set br0 up
+
+ip addr flush dev eth0
+ip addr add 10.1.1.2/24 dev eth0
+ip link set eth0 up
+
+ip link add vxlan10 type vxlan id 10 dev eth0 local 10.1.1.2 remote 10.1.1.1 dstport 4789
+ip link set vxlan10 up
+
+ip link set eth1 up
+ip link set eth1 master br0
+ip link set vxlan10 master br0
+
+ip addr add 30.1.1.4/24 dev br0
+
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.1
+```
+
+#### host1
+```bash
+ip addr flush dev eth1
+ip addr add 30.1.1.1/24 dev eth1
+ip link set eth1 up
+```
+
+#### host2
+```bash
+ip addr flush dev eth1
+ip addr add 30.1.1.2/24 dev eth1
+ip link set eth1 up
+```
+
+
+### Interface VXLAN Dynamique Multicast:
+
+> _**INFO :**_ Le parametres des hosts reste la meme que l'unicast.
+
+#### router 1 (VTEP 1)
+```bash
+# Nettoyage : supprime d'éventuelles interfaces VXLAN et bridge préexistantes
+ip link del vxlan10 2>/dev/null
+ip link del br0 2>/dev/null
+
+# Création du bridge local qui va relier les interfaces locales (L2)
+ip link add br0 type bridge
+# Activation du bridge
+ip link set br0 up
+
+# Retire les adresses IP existantes sur eth0 pour une configuration propre
+ip addr flush dev eth0
+# Attribue l'adresse IP publique/transport pour le VTEP local
+ip addr add 10.1.1.1/24 dev eth0
+# Active l'interface physique utilisée pour le transport
+ip link set eth0 up
+
+# Création de l'interface VXLAN en mode multicast dynamique —
+# 'group' spécifie l'adresse multicast utilisée pour l'annonce/auto‑découverte
+# des VTEP; 'dstport 4789' est le port UDP standard VXLAN
+ip link add name vxlan10 type vxlan id 10 dev eth0 group 239.1.1.10 dstport 4789
+# Activation de l'interface VXLAN
+ip link set vxlan10 up
+
+# Active l'interface interne vers le LAN raccordé au routeur
+ip link set eth1 up
+# Connecte l'interface LAN au bridge pour que le trafic L2 traverse le VXLAN
+ip link set eth1 master br0
+# Connecte l'interface VXLAN au bridge pour intégrer le tunnel au domaine L2
+ip link set vxlan10 master br0
+
+# Assigne une adresse IP au bridge pour la gestion/communication dans le sous-réseau virtuel
+ip addr add 30.1.1.3/24 dev br0
+
+# Table FDB : force le forwarding des trames vers l'IP du peer (unicast)
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.2
+```
+
+#### router 2 (VTEP 2)
+```bash
+ip link del vxlan10 2>/dev/null
+ip link del br0 2>/dev/null
+
+ip link add br0 type bridge
+ip link set br0 up
+
+ip addr flush dev eth0
+ip addr add 10.1.1.2/24 dev eth0
+ip link set eth0 up
+
+ip link add vxlan10 type vxlan id 10 dev eth0 local 10.1.1.2 remote 10.1.1.1 dstport 4789
+ip link set vxlan10 up
+
+ip link set eth1 up
+ip link set eth1 master br0
+ip link set vxlan10 master br0
+
+ip addr add 30.1.1.4/24 dev br0
+
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.1
+```
