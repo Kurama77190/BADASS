@@ -176,9 +176,6 @@ ip link set vxlan10 master br0
 
 # Assigne une adresse IP au bridge pour la gestion/communication dans le sous-réseau virtuel
 ip addr add 30.1.1.3/24 dev br0
-
-# Table FDB : force le forwarding des trames vers l'IP du peer (unicast)
-bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.2
 ```
 
 #### router 2 (VTEP 2)
@@ -201,8 +198,6 @@ ip link set eth1 master br0
 ip link set vxlan10 master br0
 
 ip addr add 30.1.1.4/24 dev br0
-
-bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.1
 ```
 
 
