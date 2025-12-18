@@ -1,7 +1,7 @@
 FROM frrouting/frr:latest
 
 # Install necessary packages for debugging and networking
-RUN apk add busybox iproute2 iputils bash nano
+RUN apk add --no-cache iproute2 iputils bash nano && ln -sf /sbin/ip /bin/ip
 
 # Enable necessary FRR daemons
 RUN touch /etc/frr/vtysh.conf && \
