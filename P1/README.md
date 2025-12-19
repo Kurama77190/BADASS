@@ -105,9 +105,22 @@ gns3 &
 1. Importer maintenant l'image docker dans l'applications
 2. Ouvrir un terminal auxiliaire
 3. Regarder si la configuration des composants sont bien activer dans le fichier ``/etc/frr/daemons``
-4. Lancer ``vtysh`` (Virtual TeletYpe SHell)
-5. Lancer ``sh int`` (show interface) et verifier si nous avons bien eth0 -> eth07 de up avec l'interface lo.
-6. Lancer ``conf t`` (configure terminal)
+
+*exemple de daemons configurer* :
+
+```bash
+    bgpd=yes
+    ospfd=yes
+    ospf6d=no
+    ripd=no
+    ripngd=no
+    isisd=yes
+    pimd=no
+    pim6d=no
+    ldpd=no
+    nhrpd=no
+    eigrpd=no
+```
 
 
 > _**INFO :**_ 
@@ -127,7 +140,7 @@ gns3 &
 ### Build Dockerfile and start Graphical Network Simulation 3
 
 ```bash
-docker build -t router:latest -f _sben-tay-1_router . 2> /dev/null &>1 && \
-docker build -t host:latest -f _sben-tay-1_host . 2> /dev/null &>1 && \
+docker build -t router:latest -f _sben-tay-1_router . && \
+docker build -t host:latest -f _sben-tay-1_host . && \
 gns3 &
 ```

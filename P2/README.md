@@ -215,25 +215,21 @@ journalctl -u NetworkManager -n 100 --no-pager
 
 ## CLI CLEAR
 
-Commandes pour nettoyer la configuration VXLAN/bridge (exécuter en root).
-
+Commandes pour nettoyer la configuration VXLAN/bridge.
 ```bash
 # Supprime l'interface VXLAN si présente
-ip link del vxlan10 2>/dev/null || true
+ip link del vxlan10
 
 # Désactive et supprime le bridge
-ip link set br0 down 2>/dev/null || true
-ip link del br0 2>/dev/null || true
+ip link set br0 down
+ip link del br0
 
 # Supprime les adresses IP des interfaces physiques
 ip addr flush dev eth0
 ip addr flush dev eth1
 
 # Vider la table FDB du bridge (si nécessaire)
-bridge fdb flush dev vxlan10 2>/dev/null || true
-
-# Arrêter tcpdump (exemple) si lancé en arrière-plan
-pkill -f 'tcpdump -n -i eth0 udp port 4789' || true
+bridge fdb flush dev vxlan10
 ```
 
 > _**Note :**_ shell ash par default utilise busybox, pour simplifier la configuration lancer le shell bash pour l'utilisation de iproute2 avec le cli ``ip``
