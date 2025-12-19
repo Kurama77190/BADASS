@@ -1,4 +1,6 @@
 FROM alpine:latest
 
+RUN apk update && apk upgrade
+
 # Install necessary packages for debugging and networking
 RUN apk add iproute2 iputils bash nano

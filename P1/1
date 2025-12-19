@@ -1,0 +1,65 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from _sben-tay-1_host
+#1 transferring dockerfile: 167B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:latest
+#2 ...
+
+#3 [auth] library/alpine:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:latest
+#2 DONE 1.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [1/2] FROM docker.io/library/alpine:latest@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375
+#5 resolve docker.io/library/alpine:latest@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375 0.0s done
+#5 sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 0B / 3.86MB 0.2s
+#5 sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 1.05MB / 3.86MB 0.3s
+#5 sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 3.86MB / 3.86MB 0.4s done
+#5 extracting sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53
+#5 extracting sha256:014e56e613968f73cce0858124ca5fbc601d7888099969a4eea69f31dcd71a53 0.1s done
+#5 DONE 0.5s
+
+#6 [2/2] RUN apk add busybox iproute2 iputils bash nano
+#6 0.596 ( 1/19) Installing ncurses-terminfo-base (6.5_p20251123-r0)
+#6 0.600 ( 2/19) Installing libncursesw (6.5_p20251123-r0)
+#6 0.611 ( 3/19) Installing readline (8.3.1-r0)
+#6 0.616 ( 4/19) Installing bash (5.3.3-r1)
+#6 0.637   Executing bash-5.3.3-r1.post-install
+#6 0.638 ( 5/19) Installing libcap2 (2.77-r0)
+#6 0.641 ( 6/19) Installing zstd-libs (1.5.7-r2)
+#6 0.650 ( 7/19) Installing libelf (0.194-r0)
+#6 0.655 ( 8/19) Installing libmnl (1.0.5-r2)
+#6 0.657 ( 9/19) Installing iproute2-minimal (6.17.0-r0)
+#6 0.670 (10/19) Installing libxtables (1.8.11-r1)
+#6 0.674 (11/19) Installing iproute2-tc (6.17.0-r0)
+#6 0.685 (12/19) Installing iproute2-ss (6.17.0-r0)
+#6 0.690 (13/19) Installing iproute2 (6.17.0-r0)
+#6 0.701   Executing iproute2-6.17.0-r0.post-install
+#6 0.703 (14/19) Installing iputils-arping (20250605-r0)
+#6 0.708 (15/19) Installing iputils-clockdiff (20250605-r0)
+#6 0.710 (16/19) Installing iputils-ping (20250605-r0)
+#6 0.715 (17/19) Installing iputils-tracepath (20250605-r0)
+#6 0.718 (18/19) Installing iputils (20250605-r0)
+#6 0.718 (19/19) Installing nano (8.7-r0)
+#6 0.866 Executing busybox-1.37.0-r29.trigger
+#6 0.878 OK: 13 MiB in 35 packages
+#6 DONE 1.3s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 0.5s done
+#7 exporting manifest sha256:c9d974169ddab5fb6454a9f0953f44f7f6cf787de37ab2805b12a2cdeab1fb48 0.1s done
+#7 exporting config sha256:6d8e6d248dbea71c181ca79c005420bb04acd334a8bc624473dacd80976376d2 0.0s done
+#7 exporting attestation manifest sha256:3262eb8f17796c3363c3a920214557bd4d54751908f74368a3a10ad6698880a3
+#7 exporting attestation manifest sha256:3262eb8f17796c3363c3a920214557bd4d54751908f74368a3a10ad6698880a3 0.0s done
+#7 exporting manifest list sha256:fd41f0585cc7355c4a32763c2038000dd8fec9ada6dbbfc9a85ba7bbbb2adc24 0.0s done
+#7 naming to docker.io/library/host:latest done
+#7 unpacking to docker.io/library/host:latest 0.1s done
+#7 DONE 0.7s
