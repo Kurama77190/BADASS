@@ -1,1 +1,63 @@
-void
+# ============================================
+# PARTIE 1 : CONFIGURATION LINUX (bash)
+# ============================================
+
+# Création d'une interface bridge nommée br0 (switch virtuel L2)
+ip link add br0 type bridge
+# Activation du bridge
+ip link set dev br0 up
+
+# Création de l'interface VXLAN avec VNI 10, port UDP 4789 (standard IANA)
+# Pas de "remote" ni "group" car BGP EVPN gère la découverte automatiquement
+ip link add vxlan10 type vxlan id 10 dstport 4789
+# Activation de l'interface VXLAN
+ip link set dev vxlan10 up
+
+# Ajout de l'interface VXLAN au bridge (pour relier le tunnel au switch L2)
+brctl addif br0 vxlan10
+# Ajout de l'interface eth1 au bridge (pour connecter le host)
+brctl addif br0 eth1
+
+# ============================================
+# PARTIE 2 : CONFIGURATION FRRouting (vtysh)
+# ============================================
+
+# Entrée dans le CLI FRRouting
+vtysh
+# Mode configuration terminal
+conf t
+
+# Configuration de l'interface vers le RR
+interface eth0
+ # Adresse IP du lien vers le Route Reflector (réseau /30 = 2 IPs)
+ ip address 10.1.1.2/30
+ # Activation d'OSPF sur cette interface (annonce le réseau)
+ ip ospf area 0
+
+# Configuration de la loopback (identité du routeur)
+interface lo
+ # Adresse unique qui identifie ce LEAF (utilisée par BGP)
+ ip address 1.1.1.2/32
+ # Annonce la loopback en OSPF pour qu'elle soit joignable
+ ip ospf area 0
+
+# Configuration BGP
+# Démarrage du processus BGP avec AS (Autonomous System) numéro 1
+router bgp 1
+ # Déclaration du voisin BGP : le Route Reflector (1.1.1.1)
+ neighbor 1.1.1.1 remote-as 1
+ # Utilise la loopback comme source des paquets BGP (stabilité)
+ neighbor 1.1.1.1 update-source lo
+
+# Configuration EVPN
+# Activation de la famille d'adresses L2VPN EVPN (pour les MAC)
+address-family l2vpn evpn
+  # Activation de l'échange EVPN avec le RR
+  neighbor 1.1.1.1 activate
+  # Annonce automatiquement tous les VNI configurés localement
+  advertise-all-vni
+exit-address-family
+``
+# Activation OSPF
+# Démarre le processus OSPF (nécessaire pour que les commandes "ip ospf area" fonctionnent)
+router ospf
