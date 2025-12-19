@@ -14,12 +14,11 @@ Son usage le rapproche fortement de celui d'un commutateur (switch), à l'unique
 ### Les couches OSI qu'est ce que sait ?
 
 Le modèle OSI (Open Systems Interconnection) est une norme de communication de tous les systèmes informatiques en réseau. C'est un modèle de communications entre ordinateurs proposé par l'ISO (Organisation internationale de normalisation) qui décrit les fonctionnalités nécessaires à la communication et l'organisation de ces fonctions.
-![alt text](/images/OSI_Model_v1.svg.png)
+![alt text](../images/OSI_Model_v1.svg.png)
 
 ### Static et dynamic multicast qu'est ce que sait ?
 
 Le **MULTICAST** est une forme de diffusion d'un émetteur (source unique) vers un groupe de récepteurs. Les termes « diffusion multipoint » ou « diffusion de groupe » sont également employés.
-
 
 
 
@@ -63,17 +62,11 @@ Le **MULTICAST** est une forme de diffusion d'un émetteur (source unique) vers 
 
 #### router 1 (VTEP 1)
 ```bash
-# Nettoyage : supprime d'éventuelles interfaces VXLAN et bridge préexistantes
-ip link del vxlan10 2>/dev/null
-ip link del br0 2>/dev/null
-
 # Création du bridge local qui va relier les interfaces locales (L2)
 ip link add br0 type bridge
 # Activation du bridge
 ip link set br0 up
 
-# Retire les adresses IP existantes sur eth0 pour une configuration propre
-ip addr flush dev eth0
 # Attribue l'adresse IP publique/transport pour le VTEP local
 ip addr add 10.1.1.1/24 dev eth0
 # Active l'interface physique utilisée pour le transport
@@ -93,48 +86,38 @@ ip link set eth1 master br0
 ip link set vxlan10 master br0
 
 # Assigne une adresse IP au bridge pour la gestion/communication dans le sous-réseau virtuel
-ip addr add 30.1.1.3/24 dev br0
+ip addr add 10.1.1.3/24 dev br0
 
+# optionnel with busybox !
 # Table FDB : force le forwarding des trames vers l'IP du peer (unicast)
 bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.2
 ```
 
 ### router 2 (VTEP 2)
 ```bash
-ip link del vxlan10 2>/dev/null
-ip link del br0 2>/dev/null
-
 ip link add br0 type bridge
 ip link set br0 up
-
-ip addr flush dev eth0
 ip addr add 10.1.1.2/24 dev eth0
 ip link set eth0 up
-
 ip link add vxlan10 type vxlan id 10 dev eth0 local 10.1.1.2 remote 10.1.1.1 dstport 4789
 ip link set vxlan10 up
-
 ip link set eth1 up
 ip link set eth1 master br0
 ip link set vxlan10 master br0
+ip addr add 10.1.1.4/24 dev br0
 
-ip addr add 30.1.1.4/24 dev br0
-
+#Optionel with busybox
 bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 10.1.1.1
 ```
 
 #### host1
 ```bash
-ip addr flush dev eth1
 ip addr add 30.1.1.1/24 dev eth1
-ip link set eth1 up
 ```
 
 #### host2
 ```bash
-ip addr flush dev eth1
 ip addr add 30.1.1.2/24 dev eth1
-ip link set eth1 up
 ```
 
 
@@ -144,49 +127,25 @@ ip link set eth1 up
 
 #### router 1 (VTEP 1)
 ```bash
-# Nettoyage : supprime d'éventuelles interfaces VXLAN et bridge préexistantes
-ip link del vxlan10 2>/dev/null
-ip link del br0 2>/dev/null
-
-# Création du bridge local qui va relier les interfaces locales (L2)
 ip link add br0 type bridge
-# Activation du bridge
 ip link set br0 up
 
-# Retire les adresses IP existantes sur eth0 pour une configuration propre
-ip addr flush dev eth0
-# Attribue l'adresse IP publique/transport pour le VTEP local
 ip addr add 10.1.1.1/24 dev eth0
-# Active l'interface physique utilisée pour le transport
 ip link set eth0 up
 
-# Création de l'interface VXLAN en mode multicast dynamique —
-# 'group' spécifie l'adresse multicast utilisée pour l'annonce/auto‑découverte
-# des VTEP; 'dstport 4789' est le port UDP standard VXLAN
 ip link add name vxlan10 type vxlan id 10 dev eth0 group 239.1.1.10 dstport 4789
-# Activation de l'interface VXLAN
 ip link set vxlan10 up
 
-# Active l'interface interne vers le LAN raccordé au routeur
 ip link set eth1 up
-# Connecte l'interface LAN au bridge pour que le trafic L2 traverse le VXLAN
 ip link set eth1 master br0
-# Connecte l'interface VXLAN au bridge pour intégrer le tunnel au domaine L2
 ip link set vxlan10 master br0
-
-# Assigne une adresse IP au bridge pour la gestion/communication dans le sous-réseau virtuel
-ip addr add 30.1.1.3/24 dev br0
+ip addr add 10.1.1.3/24 dev br0
 ```
 
 #### router 2 (VTEP 2)
 ```bash
-ip link del vxlan10 2>/dev/null
-ip link del br0 2>/dev/null
-
 ip link add br0 type bridge
 ip link set br0 up
-
-ip addr flush dev eth0
 ip addr add 10.1.1.2/24 dev eth0
 ip link set eth0 up
 
@@ -196,10 +155,8 @@ ip link set vxlan10 up
 ip link set eth1 up
 ip link set eth1 master br0
 ip link set vxlan10 master br0
-
 ip addr add 30.1.1.4/24 dev br0
 ```
-
 
 
 ## CLI TESTING
@@ -277,4 +234,4 @@ bridge fdb flush dev vxlan10 2>/dev/null || true
 pkill -f 'tcpdump -n -i eth0 udp port 4789' || true
 ```
 
-Note: la plupart de ces commandes doivent être exécutées avec les privilèges root (sudo).
+> _**Note :**_ shell ash par default utilise busybox, pour simplifier la configuration lancer le shell bash pour l'utilisation de iproute2 avec le cli ``ip``
