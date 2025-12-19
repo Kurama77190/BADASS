@@ -7,6 +7,8 @@
 Le **VXLAN** (Virtual Extensible LAN) est une technologie de virtualisation réseau qui vise à résoudre des problèmes d'évolutivité associés au déploiement du cloud computing. Il utilise une technique d'encapsulation proche du **VLAN** et permet d’encapsuler des trames Ethernet de couche 2 OSI dans des datagrammes **UDP** de couche 4. Le numéro de **port UDP** de destination par défaut attribué par l’IANA **pour le VXLAN est le 4789**.
 Les paramètres VXLAN, qui cloisonnent les VXLAN et peuvent être des switchs virtuels ou physiques, sont aussi connus sous le terme VTEP (VXLAN Tunnel Endpoints)
 
+![alt text](../images/WhatIsVxlan.png)
+
 ### Bridge qu'est ce que sait ?
 Un **Bridge** (pont) est un équipement informatique d'infrastructure de réseaux de type passerelle[1]. Dans les réseaux Ethernet, il intervient en couche 2 du modèle OSI (liaison). Son objectif est d'interconnecter deux segments de réseaux distincts, soit de technologies différentes, soit de même technologie, mais physiquement séparés à la conception pour diverses raisons (géographique, extension de site etc.).
 Son usage le rapproche fortement de celui d'un commutateur (switch), à l'unique différence que le commutateur ne convertit pas les formats de transmissions de données. Le pont ne doit pas être confondu avec le routeur.
@@ -20,7 +22,7 @@ Le modèle OSI (Open Systems Interconnection) est une norme de communication de 
 
 Le **MULTICAST** est une forme de diffusion d'un émetteur (source unique) vers un groupe de récepteurs. Les termes « diffusion multipoint » ou « diffusion de groupe » sont également employés.
 
-
+![alt text](../images/topology_vxlan.png)
 
 **L'UNICAST** définit une connexion réseau point à point, c'est-à-dire d'un hôte vers un (seul) autre hôte. Elle peut également être traduite en envoi individuel ou parfois diffusion individuelle. 
 
