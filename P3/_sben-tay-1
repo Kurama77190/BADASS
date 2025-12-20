@@ -1,42 +1,42 @@
-#Opening vtysh,the command line interface for FRRouting
+# Shell
+ip link add br0 type bridge
+ip link set dev br0 up
+ip link add vxlan10 type vxlan id 10 dstport 4789
+ip link set dev vxlan10 up
+brctl addif br0 vxlan10
+brctl addif br0 eth0
+
+
 vtysh
-
-#Opening configuration terminal
 conf t
-
-#Configuring the router
-#eth0 interface configuration
+hostname sben-tay-1
+no ipv6 forwarding
+!
 interface eth0
- #Assigning an IP address to the interface
  ip address 10.1.1.1/30
-  #Assigning the interface to the OSPF area 0
- ip ospf area 0
-
+!
 interface eth1
-ip address 10.1.1.5/30
-ip ospf area 0
-
+ ip address 10.1.1.5/30
+!
 interface eth2
  ip address 10.1.1.9/30
- ip ospf area 0
+!
 interface lo
  ip address 1.1.1.1/32
- ip ospf area 0
-#Configuring the BGP routing protocol with the AS number 1
+!
 router bgp 1
-#Creates a peer group named ibgp, which is used to configure the BGP session with the neighbor
  neighbor ibgp peer-group
-
  neighbor ibgp remote-as 1
- #The update source is the loopback interface, which is used to establish the BGP session
  neighbor ibgp update-source lo
-# Configuring the BGP session with any ip address in the range whithin the peer group ibgp
-bgp listen range 1.1.1.0/29 peer-group ibgp
-#Enabling address-family for the L2VPN EVPN.
-address-family l2vpn evpn
-#Activating the neighbor and configuring it as a route reflector client
+ bgp listen range 1.1.1.0/29 peer-group ibgp
+ !
+ address-family l2vpn evpn
   neighbor ibgp activate
   neighbor ibgp route-reflector-client
-exit-address-family
-#Enabling the OSPF routing protocol
+ exit-address-family
+!
 router ospf
+ network 0.0.0.0/0 area 0
+!
+line vty
+!
